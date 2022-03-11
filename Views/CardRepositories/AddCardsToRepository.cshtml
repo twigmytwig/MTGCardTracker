@@ -29,7 +29,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group ui-widget">
                 <label asp-for="CardRepositories" class="control-label">Select a Repository to Add to: </label>
-                <select>
+                <select asp-for="CardRepositoryLookUp.CardRepositoriesId">
                     @foreach (CardRepositories repository in Model.CardRepositories)
                     {
                         <option value="@repository.Id">@repository.RepositoryName</option>
@@ -39,7 +39,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Card Name:</label>
-                <input id="CardSearch" class="form-control" onkeyup="GetCards()" />
+                <input id="CardSearch" class="form-control" asp-for="CardRepositoryLookUp.CardName" onkeyup="GetCards()" />
             </div>
             
             <input type="hidden" id="CardApiId" asp-for="CardRepositoryLookUp.CardApiID"/>
@@ -83,30 +83,18 @@
                 
                 if (data.total_cards != 0) {
                     availableTags.length = 0;
-                    //for (var i = 0; i < data.total_cards - 1; i++) {
-                    //    availableTags.push(data.data[i].name);
-                        
-                    //}
                     for (const i of data.data ){
                         availableTags.push(i.name);
                     }
-                    $("#CardApiId").val = data.data[0].set_name;
-                    var test = $("#CardApiId").val;
-                    alert(test);
-
+                    document.getElementById("CardApiId").value = data.data[0].id;
+                    //var test = document.getElementById("CardApiId").value;
                 }
                 console.log(availableTags.length);
-
-
             },
             error: function () {
                 console.log("something went wrong");
             }
         });
-
-
-
-            
     }
     $("#CardSearch").autocomplete({
         source: availableTags

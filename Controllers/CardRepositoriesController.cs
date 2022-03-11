@@ -38,12 +38,12 @@ namespace Card_Tracker_v3.Controllers
                 CardName = card.CardRepositoryLookUp.CardName,
                 CardApiID = card.CardRepositoryLookUp.CardApiID,
                 Amount = card.CardRepositoryLookUp.Amount,
-                CardRepositoriesId = repository.Id
+                CardRepositoriesId = card.CardRepositoryLookUp.CardRepositoriesId
                 
             };
-            _context.Add(newCard);
-            _context.SaveChangesAsync();
-            return View();
+            _context.CardRepositoryLookUp.Add(newCard);
+            _context.SaveChanges();
+            return RedirectToAction("Index","Home");
         }
 
         // GET: CardRepositories
