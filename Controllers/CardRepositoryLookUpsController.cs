@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Card_Tracker_v3.Data;
 using Card_Tracker_v3.Models;
+using Card_Tracker_v3.ViewModels;
 
 namespace Card_Tracker_v3.Controllers
 {
@@ -20,10 +21,15 @@ namespace Card_Tracker_v3.Controllers
         }
 
         // GET: CardRepositoryLookUps
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var trackerContext = _context.CardRepositoryLookUp.Include(c => c.CardRepositories);
-            return View(await trackerContext.ToListAsync());
+
+            CollectionViewerViewModel model = new()
+            {
+                CardRepositoryLookUp = _context.CardRepositoryLookUp.Include(c => c.CardRepositories).ToList(),
+                CardRepositories = _context.CardRepositories.ToList()
+            };
+            return View(model);
         }
 
         // GET: CardRepositoryLookUps/Details/5

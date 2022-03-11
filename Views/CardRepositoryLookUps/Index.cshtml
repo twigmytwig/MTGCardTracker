@@ -1,54 +1,75 @@
-﻿@model IEnumerable<Card_Tracker_v3.Models.CardRepositoryLookUp>
+﻿
+@model Card_Tracker_v3.ViewModels.CollectionViewerViewModel
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="//cdn.datatables.net/1.11.2/css/jquery.dataTables.min.css" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
 
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CardApiID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CardName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CardRepositories)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CardApiID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CardName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CardRepositories.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@*<select>
+        @foreach (CardRepositories repository in Model.CardRepositories) {
+            <option value="@repository.Id">@repository.RepositoryName</option>
+        }
+    </select>*@
+<div class="container">
+    <table id="myTable" class="table">
+        <thead>
+            <tr>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.CardApiID)
+                    </th>*@
+                <th>
+                    Card Name
+                </th>
+                <th>
+                    # of Cards
+                </th>
+                <th>
+                    Location
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CardRepositoryLookUp)
+            {
+                <tr>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.CardApiID)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CardName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CardRepositories.RepositoryName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts{
+    <script src="//cdn.datatables.net/1.11.2/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
 }
-    </tbody>
-</table>

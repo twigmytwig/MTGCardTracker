@@ -22,6 +22,7 @@ namespace Card_Tracker_v3.Controllers
 
         public IActionResult AddCardsToRepository()
         {
+            ViewData["CardPostStatus"] = "";
             AddCardViewModel viewModel = new()
             {
                 CardRepositories = _context.CardRepositories.ToList()
@@ -33,17 +34,38 @@ namespace Card_Tracker_v3.Controllers
         [HttpPost]
         public IActionResult AddCardsToRepository(CardRepositories repository ,AddCardViewModel card)
         {
-            CardRepositoryLookUp newCard = new()
+            try
             {
-                CardName = card.CardRepositoryLookUp.CardName,
-                CardApiID = card.CardRepositoryLookUp.CardApiID,
-                Amount = card.CardRepositoryLookUp.Amount,
-                CardRepositoriesId = card.CardRepositoryLookUp.CardRepositoriesId
-                
-            };
-            _context.CardRepositoryLookUp.Add(newCard);
-            _context.SaveChanges();
-            return RedirectToAction("Index","Home");
+                CardRepositoryLookUp newCard = new()
+                {
+                    CardName = card.CardRepositoryLookUp.CardName,
+                    CardApiID = card.CardRepositoryLookUp.CardApiID,
+                    Amount = card.CardRepositoryLookUp.Amount,
+                    CardRepositoriesId = card.CardRepositoryLookUp.CardRepositoriesId
+
+                };
+                _context.CardRepositoryLookUp.Add(newCard);
+                _context.SaveChanges();
+
+                //After successful save
+                ViewData["CardPostStatus"] = "Card Saved Successfully!";
+                //This reloads the model
+                AddCardViewModel viewModel = new()
+                {
+                    CardRepositories = _context.CardRepositories.ToList()
+                };
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                ViewData["CardPostStatus"] = "Error: " + ex.Message;
+                AddCardViewModel viewModel = new()
+                {
+                    CardRepositories = _context.CardRepositories.ToList()
+                };
+                return View(viewModel);
+            }
+            
         }
 
         // GET: CardRepositories
