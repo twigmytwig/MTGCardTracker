@@ -44,8 +44,26 @@ namespace Card_Tracker_v3.Controllers
                     CardRepositoriesId = card.CardRepositoryLookUp.CardRepositoriesId
 
                 };
-                _context.CardRepositoryLookUp.Add(newCard);
-                _context.SaveChanges();
+                //Grabbing all cards under this current repository id to prevent duplicate entries
+                var listOfCards =_context.CardRepositoryLookUp.Where(x => x.CardRepositoriesId == newCard.CardRepositoriesId).ToList();
+                bool isDuplicate = false;
+                foreach(CardRepositoryLookUp singleCard in listOfCards)
+                {
+                    if(singleCard.CardName == newCard.CardName)
+                    {
+                        //If its a duplicate, invrement the original's amount total
+                        singleCard.Amount += newCard.Amount;
+                        _context.SaveChanges();
+                        isDuplicate = true;
+                    }
+                }
+                //If the card was not a duplicate, save it
+                if (!isDuplicate)
+                {
+                    _context.CardRepositoryLookUp.Add(newCard);
+                    _context.SaveChanges();
+                }
+                    
 
                 //After successful save
                 ViewData["CardPostStatus"] = "Card Saved Successfully!";
