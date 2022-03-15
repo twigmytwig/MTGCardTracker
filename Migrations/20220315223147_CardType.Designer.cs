@@ -4,14 +4,16 @@ using Card_Tracker_v3.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Card_Tracker_v3.Migrations
 {
     [DbContext(typeof(TrackerContext))]
-    partial class TrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20220315223147_CardType")]
+    partial class CardType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,40 +106,6 @@ namespace Card_Tracker_v3.Migrations
                     b.ToTable("CommanderDeck");
                 });
 
-            modelBuilder.Entity("Card_Tracker_v3.Models.DeckLookUp", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CardAmount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CardName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CardTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommanderDeckId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("LegalityStatus")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isCommander")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CardTypeId");
-
-                    b.HasIndex("CommanderDeckId");
-
-                    b.ToTable("DeckLookUp");
-                });
-
             modelBuilder.Entity("Card_Tracker_v3.Models.MagicGameFormats", b =>
                 {
                     b.Property<int>("Id")
@@ -173,25 +141,6 @@ namespace Card_Tracker_v3.Migrations
                         .IsRequired();
 
                     b.Navigation("MagicGameFormats");
-                });
-
-            modelBuilder.Entity("Card_Tracker_v3.Models.DeckLookUp", b =>
-                {
-                    b.HasOne("Card_Tracker_v3.Models.CardType", "CardType")
-                        .WithMany()
-                        .HasForeignKey("CardTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Card_Tracker_v3.Models.CommanderDeck", "CommanderDeck")
-                        .WithMany()
-                        .HasForeignKey("CommanderDeckId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CardType");
-
-                    b.Navigation("CommanderDeck");
                 });
 #pragma warning restore 612, 618
         }

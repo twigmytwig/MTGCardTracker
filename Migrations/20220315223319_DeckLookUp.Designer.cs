@@ -4,14 +4,16 @@ using Card_Tracker_v3.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Card_Tracker_v3.Migrations
 {
     [DbContext(typeof(TrackerContext))]
-    partial class TrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20220315223319_DeckLookUp")]
+    partial class DeckLookUp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
