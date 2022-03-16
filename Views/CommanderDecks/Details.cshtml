@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Card_Tracker_v3.Models.DeckLookUp>
+
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Card List</h1>
+
+@using (Html.BeginForm("UploadDeck",
+                       "CommanderDecks",
+                       FormMethod.Post,
+                       new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Upload Card List:</label>
+    <input type = "file" name = "file" />
+    <input class="btn btn-primary" type="submit" />
+
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CommanderDeck)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CardName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CardAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LegalityStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isCommander)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CardType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CommanderDeck.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CardName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CardAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LegalityStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isCommander)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CardType.Id)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

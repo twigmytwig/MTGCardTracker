@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Card_Tracker_v3.Models.CommanderDeck>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DeckName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AmountOfCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MagicGameFormats)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlayReadyStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cost)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeckName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AmountOfCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MagicGameFormats.FormatName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayReadyStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
