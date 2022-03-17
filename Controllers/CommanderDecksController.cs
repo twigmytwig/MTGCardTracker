@@ -9,6 +9,7 @@ using Card_Tracker_v3.Data;
 using Card_Tracker_v3.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Card_Tracker_v3.ViewModels;
 
 namespace Card_Tracker_v3.Controllers
 {
@@ -29,30 +30,34 @@ namespace Card_Tracker_v3.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadDeck(IFormFile file, int id)
+        public IActionResult UploadDeck([Bind("DeckId")]IFormFile file, int DeckId)
         {
             using (var reader = new StreamReader(file.OpenReadStream()))
             {
+                int numberOfCards = 0;
                 while (reader.Peek() >= 0) {
                     var test = reader.ReadLine();
                     DeckLookUp newCard = new()
                     {
                         CardAmount = Int32.Parse(test.Split(' ')[0]),
                         CardName = test.Split(' ', 2)[1],
-                        CommanderDeckId = 1, //This is manual for now
+                        CommanderDeckId = DeckId, //This is manual for now
                         CardTypeId = 1,
                         LegalityStatus = true
                     };
                     _context.DeckLookUp.Add(newCard);
                     _context.SaveChanges();
-                    Console.WriteLine(reader.ReadLine());
+                    numberOfCards++;
                 }
+                var deck = _context.CommanderDeck.Where(x => x.Id == DeckId).SingleOrDefault();
+                deck.AmountOfCards = numberOfCards;
+                _context.SaveChanges();
             }
             return View();
         }
 
         // GET: CommanderDecks/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
@@ -60,12 +65,17 @@ namespace Card_Tracker_v3.Controllers
             }
 
             var cardList = await _context.DeckLookUp.Where(x => x.CommanderDeckId == id).ToListAsync();
+            UploadDeckViewModel viewModel = new()
+            {
+                Cards = cardList,
+                DeckId = id
+            };
             if (cardList == null)
             {
                 return NotFound();
             }
 
-            return View(cardList);
+            return View(viewModel);
         }
 
         // GET: CommanderDecks/Create
